@@ -121,6 +121,23 @@ Book Kindle::getBook(size_t i) const
     return books[i];
 }
 
+Book Kindle::getBook(MyString title)const
+{
+    if (numOfBooks > 0)
+    {
+        for (int i = 0; i < numOfBooks; i++)
+        {
+            if (title == books[i].getTitle())
+            {
+                return books[i];
+            }
+        }
+        cout << "There is no such book in Kindle!" << '\n';
+    }
+    else
+        cout << "There is no books in Kindle!" << '\n';
+}
+
 void Kindle::signup()
 {
     char username[20];
@@ -175,7 +192,7 @@ char* getBookInfo(char* lineBuff, size_t iter1, size_t iter2, char ch)
     return bookInfo;
 }
 
-void Kindle::readBook(const MyString& bookTitle) const 
+void Kindle::readBook(const MyString& bookTitle)
 {
     if (numOfBooks > 0) 
     {
@@ -184,6 +201,7 @@ void Kindle::readBook(const MyString& bookTitle) const
             if (books[i].getTitle() == bookTitle)
             {
                 cout << books[i]<<"\n";
+                currUser.read(books[i]);
             }
         }
     }
@@ -192,20 +210,62 @@ void Kindle::readBook(const MyString& bookTitle) const
     }
 }
 
+void Kindle::writeBook() 
+{
+    addBook();
+}
 
-void Kindle::loadKindle(const MyString& username, const MyString& password)
+
+bool Kindle::loadKindle(const MyString& username, const MyString& password)
 {
     if (numOfUsers > 0) {
         for (int i = 0; i < numOfUsers; i++) {
             if (users[i].getUsername() == username && users[i].getPassword() == password)
             {
                 currUser = users[i];
+                return true;
             }
         }
         std::cout << "There is no user with these username and password!" << '\n';
+        return false;
     }
     else {
         throw std::logic_error("There is no users in Kindle!");
+    }
+   
+}
+
+void Kindle::workWithKindle(MyString& command)
+{
+    if(command=="read")
+    {
+        MyString book;
+        cout << '\n' << "Please enter the title of the book you would like to read: "<<'\n';
+        cin >> book;
+        readBook(book);
+    }
+    else if (command == "write") 
+    {
+        addBook();
+    }
+    else if (command == "coments")
+    {
+        MyString book;
+        cout << '\n' << "Please enter the title of the book you would like to see comments about: " << '\n';
+        cin >> book;
+        Book b = getBook(book);
+        b.getComments();
+    }
+    else if (command == "addComment")
+    {
+        MyString book;
+        cout << '\n' << "Please enter the title of the book you would like to add comment about: " << '\n';
+        cin >> book;
+        MyString comment;
+        cout << "Please enter your comment: " << '\n';
+        cin >> comment;
+        Book b = getBook(book);
+        currUser.addCommentOfBook(b, comment);
     }
    
 }

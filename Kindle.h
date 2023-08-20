@@ -20,20 +20,26 @@ private:
 	void resizeBooks();
 	void addUser(const MyString& username, const MyString& password);
 	Book getBook(size_t i) const;
+	Book getBook(MyString title)const;
+	void addBook();
+
 public:
 	Kindle();
 	Kindle(const Kindle&);
 	Kindle& operator=(const Kindle&);
 
-	void addBook();
+
 
 	size_t getNumOfUsers()const;
 	size_t getNumOfBooks() const;
 	User getUsers(size_t i) const;
-	void readBook(const MyString& bookTitle) const;
+	void readBook(const MyString& bookTitle);
+	void writeBook();
 
 
-	void loadKindle(const MyString& username, const MyString& password);
+
+	bool loadKindle(const MyString& username, const MyString& password);
+	void workWithKindle(MyString& command);
 	void signup();
 
 
